@@ -1,12 +1,12 @@
 import json
 import os
 
-mins = 10
+mins = 60
 history = []
 files = []
 blacklist = ["Bladee", "Thaiboy Digital", "Ecco2k", "Drain Gang Archive", "Yung Lean", "Dj Billybool", "Michael Jackson", "Nirvana"] #artists to blacklist
-allSongs = {} #key: (title, artist) value: time
-final = [] #final = (time, title, artist)
+allSongs = {} #key: (title, artist) value: [time, date]
+final = [] #final = (date, title, artist, time)
 for i in os.listdir(os.getcwd()):
     if "StreamingHistory" in i:
         history.append(i)
@@ -17,25 +17,32 @@ for i in history:
 def initialize(data):
     for i in data:
         if i["artistName"] not in blacklist:
-            allSongs[(i["trackName"], i["artistName"])] = 0
+            allSongs[(i["trackName"], i["artistName"])] = [0, ""]
+
+def getDate(i):
+    if allSongs[i["trackName"], i["artistName"]][1] == "":
+        return i["endTime"]
+    else:
+        return allSongs[i["trackName"], i["artistName"]][1]
 
 def organize(data):
     for i in data:
         if i["artistName"] not in blacklist:
-            allSongs[(i["trackName"], i["artistName"])] += i["msPlayed"]
+            allSongs[(i["trackName"], i["artistName"])] = [allSongs[(i["trackName"], i["artistName"])][0] + i["msPlayed"], getDate(i)]
         
 for i in files:
     initialize(i)
 for i in files:
     organize(i)
 
-for i in allSongs:
-    allSongs[i] = round(allSongs[i] / 60000)
-    if allSongs[i] >= mins:
-        final.append((allSongs[i], i[0], i[1]))
 
+for i in allSongs:
+    allSongs[i][0] = round(allSongs[i][0] / 60000)
+    if allSongs[i][0] >= mins:
+        final.append((allSongs[i][1], i[0], i[1], allSongs[i][0]))
+#final = (date, title, artist, time)
 final.sort()
 txt = open("output.txt", "w", encoding="utf-8")
 for i in final:
-    txt.write(f"{i[1]} | {i[2]} | {i[0]} \n")
+    txt.write(f"{i[0]} | {i[1]} | {i[2]} | {i[3]} \n")
 txt.close()
