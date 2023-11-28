@@ -4,9 +4,10 @@ import os
 mins = 60
 history = []
 files = []
-blacklist = ["Bladee", "Thaiboy Digital", "Ecco2k", "Drain Gang Archive", "Yung Lean", "Dj Billybool", "Michael Jackson", "Nirvana"] #artists to blacklist
+# current black = ["Bladee", "Thaiboy Digital", "Ecco2k", "Drain Gang Archive", "Yung Lean", "Dj Billybool", "Michael Jackson", "Nirvana"]
+blacklist = [] #artists to blacklist
 allSongs = {} #key: (title, artist) value: [time, date]
-final = [] #final = (date, title, artist, time)
+final = [] #final = (date, time, title, artist)
 for i in os.listdir(os.getcwd()):
     if "StreamingHistory" in i:
         history.append(i)
@@ -39,10 +40,10 @@ for i in files:
 for i in allSongs:
     allSongs[i][0] = round(allSongs[i][0] / 60000)
     if allSongs[i][0] >= mins:
-        final.append((allSongs[i][1], i[0], i[1], allSongs[i][0]))
-#final = (date, title, artist, time)
+        final.append((allSongs[i][1].split(" ")[0], allSongs[i][0], i[0], i[1]))
 final.sort()
 txt = open("output.txt", "w", encoding="utf-8")
 for i in final:
     txt.write(f"{i[0]} | {i[1]} | {i[2]} | {i[3]} \n")
 txt.close()
+#final = date of first listen | mins listened | title | artist
