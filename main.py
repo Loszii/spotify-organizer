@@ -4,8 +4,6 @@ import os
 files = []
 allSongs = {}
 mins = int(input("Enter minimum number of minutes listened (0 to see all data): "))
-#add when first listened to artist
-
 
 for i in os.listdir(os.getcwd()):
     if "StreamingHistory" in i:
@@ -25,7 +23,7 @@ def initialize(data):
     for j in data:
         for i in j:
             allSongs[(i["trackName"], i["artistName"])] = [0, ""]
-            #(title, artist): [time, date]
+            #allSongs = (title, artist): [time, date]
 
 def organize(data):
     for j in data:
@@ -78,12 +76,12 @@ def sortBySong(config):
             txt.write(f"\n{i[1]} | {i[0]} | {i[2]} | {i[3]}")
         txt.write(f"\n\nThe total number of songs listened to for more than {mins} minutes is {len(final)}")
         txt.write(f"\nThe total number of minutes within all data is {allMinutes} minutes, which is {round(allMinutes / 24)} days\n\n")
-
     txt.close()
 
 def sortByArtist(config):
     final = []
-    dataPerArtist = {} #artist: (date, time)
+    dataPerArtist = {}
+    #artist: (date, time)
     for i in allSongs:
         dataPerArtist[i[1]] = [0, ""]
     for i in allSongs:
@@ -124,7 +122,6 @@ def sortByArtist(config):
 initialize(files)
 organize(files)
 minConvert()
-
 
 def menu():
     count = 0
