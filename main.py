@@ -1,11 +1,11 @@
 import json
 import os
-#different then wrapped since doesnt include features, and includes songs listened to for split seconds
-#wrapped also has different algorithm, for example when calculating top song may look at date window you continued listening for
-#implement blacklist / whitelist
+
 files = []
 allSongs = {}
+allSortedSongs = {}
 mins = int(input("Enter minimum number of minutes listened (0 to see all data): "))
+artists = []
 
 for i in os.listdir(os.getcwd()):
     if "StreamingHistory" in i:
@@ -52,15 +52,15 @@ def sortBySong(config):
     allMinutes = round(getTotalMin())
     if config == "d":
         mode = "DATE"
-        for i in allSongs:
-            if allSongs[i][0] >= mins:
-                final.append((allSongs[i][1].split(" ")[0], allSongs[i][0], i[0], i[1]))
+        for i in allSortedSongs:
+            if allSortedSongs[i][0] >= mins:
+                final.append((allSortedSongs[i][1].split(" ")[0], allSortedSongs[i][0], i[0], i[1]))
                 #final = [(date, time, title, artist), ...]
     else:
         mode = "MIN"
-        for i in allSongs:
-            if allSongs[i][0] >= mins:
-                final.append((allSongs[i][0], allSongs[i][1].split(" ")[0], i[0], i[1]))
+        for i in allSortedSongs:
+            if allSortedSongs[i][0] >= mins:
+                final.append((allSortedSongs[i][0], allSortedSongs[i][1].split(" ")[0], i[0], i[1]))
                 #final = [(time, date, title, artist), ...]
     final.sort()
     txt = open("output.txt", "w", encoding="utf-8")
@@ -82,10 +82,10 @@ def sortByArtist(config):
     dataPerArtist = {}
     #dataPerArtist = artist: (date, time)
     allArtists = getTotalArtist()
-    for i in allSongs:
+    for i in allSortedSongs:
         dataPerArtist[i[1]] = [0, ""]
-    for i in allSongs:
-        dataPerArtist[i[1]] = [dataPerArtist[i[1]][0] + allSongs[i][0], getDate(allSongs[i][1], dataPerArtist[i[1]][1])]
+    for i in allSortedSongs:
+        dataPerArtist[i[1]] = [dataPerArtist[i[1]][0] + allSortedSongs[i][0], getDate(allSortedSongs[i][1], dataPerArtist[i[1]][1])]
     if config == "d":
         for i in dataPerArtist:
             if dataPerArtist[i][0] >= mins: 
@@ -113,18 +113,47 @@ initialize(files)
 organize(files)
 minConvert()
 
+def filterSongs(config):
+    #allSongs = (title, artist): [time, date]
+    if config == "b":
+        for i in allSongs:
+            if i[1] not in artists:
+                allSortedSongs[i] = allSongs[i]
+    elif config == "w":
+        for i in allSongs:
+            if i[1] in artists:
+                allSortedSongs[i] = allSongs[i]
+                
+
+
+def getArtFilter():
+    while True:
+        option = input("Enter \"b\" to set to blacklist or \"w\" to set to whitelist\n")
+        if option == "b":
+            return "b"
+        elif option == "w":
+            return "w"
+
+def artistMenu():
+    config = getArtFilter()
+    while True:
+        option = input("Enter artist to blacklist or whitelist (HIT ENTER TO SKIP/FINISH)\n")
+        if option == "":
+            break
+        else:
+            artists.append(option.strip())
+    filterSongs(config)
+
 def menu():
-    count = 0
-    while count != 1:
+    artistMenu()
+    while True:
         option = input("Enter \"d\" to sort by date or \"m\" to sort by minutes\n")
         if option == "d":
             sortBySong(option)
             sortByArtist(option)
-            count = 1
+            return
         elif option == "m":
             sortBySong(option)
             sortByArtist(option)
-            count = 1
-        else:
-            pass
+            return
 menu()
