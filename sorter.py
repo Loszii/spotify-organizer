@@ -1,5 +1,5 @@
 import loader
-
+#To do: add getTotalMins(), getTotalArtists(), getTotalSongs()
 def minMinutes(L, mins):
     """Takes in a list L and a minimumn number of minutes and takes out 
     each data set (list) in list that has less time listened than mins"""
@@ -11,7 +11,7 @@ def minMinutes(L, mins):
 
 def sortByDate(L):
     """Takes in a list L and changes each data set to be of form
-    [date, mins, title, artist] so when sorted it sorts by date"""
+    [date, mins, title, artist] (swaps first two) so when sorted it sorts by date"""
     newL = []
     for i in L:
         mins = i[0]
@@ -22,7 +22,8 @@ def sortByDate(L):
     return newL
 
 def sortByArtists(L, artists):
-    """Takes in list of data sets and list of artist and returns L of only their data"""
+    #whitelists
+    """Takes in list of data sets and a list of artists and returns L of only their data"""
     newL = []
     for i in L:
         mins = i[0]
@@ -34,6 +35,7 @@ def sortByArtists(L, artists):
     return newL
 
 def removeArtists(L, artists):
+    #blacklists
     """Takes in list of data sets and list of artists and returns L without artists data"""
     newL = []
     for i in L:
@@ -44,14 +46,17 @@ def removeArtists(L, artists):
         if artist not in artists:
             newL.append([mins, date, title, artist])
     return newL
-#Note: edit artists before picking sorting mode
 
-#songs is list of form [[minutes, date, title, artist]]
-songs = loader.load()
-songs = minMinutes(songs, 60)
-songs = removeArtists(songs, ["Michael Jackson", "Bladee", "Ecco2k", "Thaiboy Digital", "Drain Gang Archive", "Nirvana",
-                              "Yung Lean", "Dj Billybool", "Xavier Wulf", "Cartier God", "dose", "Tapet", "Varg²™", "Woesum",
-                              "Lady Gaga", "The Jacksons", "Ozzy Osbourne", "Black Sabbath"])
-songs = sortByDate(songs) #comment this out to sort by mins
+def main():
+    """Main program, calls all functions above and gets song data from loader"""
+    #Note: edit artists before picking sorting mode
+    songs = loader.load() #songs is list of form [[minutes, date, title, artist]]
+    songs = minMinutes(songs, 15)
+    songs = removeArtists(songs, ["Michael Jackson", "Bladee", "Ecco2k", "Thaiboy Digital", "Drain Gang Archive", "Nirvana",
+                                  "Yung Lean", "Dj Billybool", "Xavier Wulf", "Cartier God", "dose", "Tapet", "Varg²™", "Woesum",
+                                  "Lady Gaga", "The Jacksons", "Ozzy Osbourne", "Black Sabbath"])
 
-loader.print(songs)
+    #songs = sortByDate(songs) #comment this out to sort by mins
+    loader.print(songs)
+
+main()

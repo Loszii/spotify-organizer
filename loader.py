@@ -4,7 +4,7 @@ import os
 
 def storeFiles():
     """Opens each file in current directory with StreamingHistory in name
-    Then appends to a files list after using json.load to conver to python object"""
+    Then appends to a files list after using json.load to convert to python object"""
     files = []
     for i in os.listdir(os.getcwd()):
         if "StreamingHistory" in i:
@@ -12,8 +12,8 @@ def storeFiles():
     return files
 
 def storeDict(L):
-    """Takes in list parameter of files and return dictionary of songs
-    Dict form: (track, artist): (ms, first date)"""
+    """Takes in list parameter of files (each file is list of dicts) and return
+    dictionary of songs. Dict form: (track, artist): (ms, first date)"""
     songs = {}
     for i in L: #i is a StreamingHistory list from main list of files
         for j in i: #j is a dict in the sub list
@@ -31,7 +31,8 @@ def storeDict(L):
     return songs
 
 def storeSongs(D):
-    """Takes in a dictionary of tuples with values of time and dates, appends each songs data to a list and returns"""
+    """Takes in a dictionary with keys of tuples whose values are time and dates,
+    appends each songs data to a list and returns"""
     songs = []
     for i in D:
         title = i[0]
