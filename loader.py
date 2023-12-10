@@ -47,10 +47,13 @@ def load():
     """Calls above functions and returns the list of songs"""
     return storeSongs(storeDict(storeFiles()))
 
-def print(L):
-    """Takes in list L of lists and sorts it then prints each element in each list"""
-    txt = open("output.txt", "w", encoding="utf-8")
+def print(L, mins, artists, songs):
+    """Takes in list L of lists and sorts it. Also takes in totalMins, totalArtists, and totalSongs
+    Then prints them along with each element in the list"""
+    days = round(mins / 1440)
     L.sort()
+    txt = open("output.txt", "w", encoding="utf-8")
+    txt.write(f"Total Minutes: {mins}\nTotal Days: {days}\nTotal Artists: {artists}\nTotal Songs: {songs}\n\n")
     for i in L:
         txt.write(f"{i[0]} | {i[1]} | {i[2]} | {i[3]}\n")
     txt.close()
