@@ -1,37 +1,37 @@
-#Returns a files list which is a list of dictionaries involving song data
 import json
 import os
 
 def storeFiles():
-    """Opens each file in current directory with StreamingHistory in name
+    """Opens each file in current directory with Streaming_History in name
     Then appends to a files list after using json.load to convert to python object"""
     files = []
     for i in os.listdir(os.getcwd()):
-        if "StreamingHistory" in i:
+        if "Streaming_History" in i:
             files.append(json.load(open(i, encoding="utf-8")))
     return files
 
 def storeDict(L):
     """Takes in list parameter of files (each file is list of dicts) and return
-    dictionary of songs. Dict form: (track, artist): (ms, first date)"""
+    dictionary of songs. Dict form: (track, artist): (ms, first listened)"""
     songs = {}
-    for i in L: #i is a StreamingHistory list from main list of files
+    for i in L: #i is a Streaming_History list from main list of files
         for j in i: #j is a dict in the sub list
-            songs[(j["trackName"], j["artistName"])] = [0, ""]
+            songs[(j["master_metadata_track_name"], j["master_metadata_album_artist_name"])] = [0, []]
     for i in L:
         for j in i:
-            prevMS = songs[(j["trackName"], j["artistName"])][0]
-            prevDate = songs[(j["trackName"], j["artistName"])][1]
-            newMS = prevMS + j["msPlayed"] #for each time listened to this song adds the ms played
-            if prevDate == "": #if no date then this is first since history is sorted
-                newDate = (j["endTime"].split())[0]
-            else:
-                newDate = prevDate
-            songs[(j["trackName"], j["artistName"])] = (newMS, newDate)
+            prevMS = songs[(j["master_metadata_track_name"], j["master_metadata_album_artist_name"])][0]
+            newMS = prevMS + j["ms_played"] #for each time listened to this song adds the ms played
+            prevDates = songs[(j["master_metadata_track_name"], j["master_metadata_album_artist_name"])][1]
+            newDates = prevDates + [j["ts"]]
+            songs[(j["master_metadata_track_name"], j["master_metadata_album_artist_name"])] = [newMS, newDates]
+    for i in songs: #new feature make sure works properly
+        dates = songs[i][1]
+        newDates = min(dates)
+        songs[i][1] = newDates
     return songs
 
 def storeSongs(D):
-    """Takes in a dictionary with keys of tuples whose values are time and dates,
+    """Takes in a dictionary with keys of tuples whose values are time and date,
     appends each songs data to a list and returns"""
     songs = []
     for i in D:
@@ -39,8 +39,9 @@ def storeSongs(D):
         artist = i[1]
         ms = D[i][0]
         date = D[i][1]
+        newDate = date.split("T")[0]
         minutes = round(ms / 60000) #turns total ms to total mins
-        songs.append([minutes, date, title, artist]) #songs will be a list of lists with this data in each
+        songs.append([minutes, newDate, title, artist]) #songs will be a list of lists with this data in each
     return songs
 
 def load():

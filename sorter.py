@@ -67,16 +67,16 @@ def getTotalSongs(L):
 def main():
     """Main program, calls all functions above and gets song data from loader"""
     songs = loader.load() #songs is list of form [[minutes, date, title, artist]]
-    songs = minMinutes(songs, 0)
-    #songs = removeArtists(songs, ["Michael Jackson", "Bladee", "Ecco2k", "Thaiboy Digital", "Drain Gang Archive", "Nirvana",
-    #                              "Yung Lean", "Dj Billybool", "Xavier Wulf", "Cartier God", "dose", "Tapet", "Varg²™", "Woesum",
-    #                              "Lady Gaga", "The Jacksons", "Ozzy Osbourne", "Black Sabbath"])
+    songs = minMinutes(songs, 100)
+    songs = removeArtists(songs, ["Michael Jackson", "Bladee", "Ecco2k", "Thaiboy Digital", "Drain Gang Archive", "Nirvana",
+                                  "Yung Lean", "Dj Billybool", "Xavier Wulf", "Cartier God", "dose", "Tapet", "Varg²™", "Woesum",
+                                  "Lady Gaga", "The Jacksons", "Ozzy Osbourne", "Black Sabbath", None])
     totalMinutes = getTotalMins(songs)
     totalArtists = getTotalArtists(songs)
     totalSongs = getTotalSongs(songs)
 
     #Note: always call sortByDate last since it changes the index of data
-    #songs = sortByDate(songs) #comment this out to sort by mins
+    songs = sortByDate(songs) #comment this out to sort by mins
     loader.print(songs, totalMinutes, totalArtists, totalSongs)
 
 main()
