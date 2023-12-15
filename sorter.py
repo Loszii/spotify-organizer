@@ -1,5 +1,23 @@
 import loader
 
+def minDate(L, date):
+    """Takes in a list L and minimum date. Returns new list that does not
+    inlcude songs listened to before that date"""
+    newL= []
+    for i in L:
+        if i[1] >= date:
+            newL.append(i)
+    return newL
+
+def maxDate(L, date):
+    """Takes in a list L and max date. Returns new list that does not
+    inlcude songs listened to after that date"""
+    newL= []
+    for i in L:
+        if i[1] <= date:
+            newL.append(i)
+    return newL
+
 def minMinutes(L, mins):
     """Takes in a list L and a minimum number of minutes. Returns new list
     that does not include songs listened to for less than mins"""
@@ -71,6 +89,8 @@ def main():
     songs = removeArtists(songs, ["Michael Jackson", "Bladee", "Ecco2k", "Thaiboy Digital", "Drain Gang Archive", "Nirvana",
                                   "Yung Lean", "Dj Billybool", "Xavier Wulf", "Cartier God", "dose", "Tapet", "Varg²™", "Woesum",
                                   "Lady Gaga", "The Jacksons", "Ozzy Osbourne", "Black Sabbath", None])
+    #songs = minDate(songs, "2022-00-00")
+    #songs = maxDate(songs, "2023-05-00")
     totalMinutes = getTotalMins(songs)
     totalArtists = getTotalArtists(songs)
     totalSongs = getTotalSongs(songs)
