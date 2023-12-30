@@ -1,5 +1,3 @@
-#This is a python program to organize your full spotify streaming history!
-#Simply add all files with "Streaming_History_Audio to this directory and edit the main function below"
 import loader
 
 def minDate(L, date):
