@@ -20,11 +20,11 @@ def storeDict(L):
     for i in L:
         for j in i:
             prevMS = songs[(j["master_metadata_track_name"], j["master_metadata_album_artist_name"])][0]
-            newMS = prevMS + j["ms_played"] #for each time listened to this song adds the ms played
+            newMS = prevMS + j["ms_played"]
             prevDates = songs[(j["master_metadata_track_name"], j["master_metadata_album_artist_name"])][1]
             newDates = prevDates + [j["ts"]]
             songs[(j["master_metadata_track_name"], j["master_metadata_album_artist_name"])] = [newMS, newDates]
-    for i in songs: #new feature make sure works properly
+    for i in songs:
         dates = songs[i][1]
         newDates = min(dates)
         songs[i][1] = newDates
@@ -40,8 +40,8 @@ def storeSongs(D):
         ms = D[i][0]
         date = D[i][1]
         newDate = date.split("T")[0]
-        minutes = round(ms / 60000) #turns total ms to total mins
-        songs.append([minutes, newDate, title, artist]) #songs will be a list of lists with this data in each
+        minutes = round(ms / 60000)
+        songs.append([minutes, newDate, title, artist])
     return songs
 
 def load():

@@ -1,3 +1,5 @@
+#This is a python program to organize your full spotify streaming history!
+#Simply add all files with "Streaming_History_Audio to this directory and edit the main function below"
 import loader
 
 def minDate(L, date):
@@ -84,19 +86,17 @@ def getTotalSongs(L):
 
 def main():
     """Main program, calls all functions above and gets song data from loader"""
-    songs = loader.load() #songs is list of form [[minutes, date, title, artist]]
-    songs = minMinutes(songs, 100)
-    songs = removeArtists(songs, ["Michael Jackson", "Bladee", "Ecco2k", "Thaiboy Digital", "Drain Gang Archive", "Nirvana",
-                                  "Yung Lean", "Dj Billybool", "Xavier Wulf", "Cartier God", "dose", "Tapet", "Varg²™", "Woesum",
-                                  "Lady Gaga", "The Jacksons", "Ozzy Osbourne", "Black Sabbath", None])
-    #songs = minDate(songs, "2022-00-00")
-    #songs = maxDate(songs, "2023-05-00")
+    songs = loader.load() #songs is list of form [[minutes, first listened, title, artist], ...]
+    songs = minMinutes(songs, 30) #enter minimum minutes listened here
+    songs = removeArtists(songs, ["", None]) #enter blacklisted artists in list
+    #songs = sortByArtists(songs, [""]) #uncomment to use whitelist and enter artists in list
+    songs = minDate(songs, "0000-00-00") #enter minimum date here
+    songs = maxDate(songs, "2023-12-29") #enter maximum date here
     totalMinutes = getTotalMins(songs)
     totalArtists = getTotalArtists(songs)
     totalSongs = getTotalSongs(songs)
 
-    #Note: always call sortByDate last since it changes the index of data
-    songs = sortByDate(songs) #comment this out to sort by mins
+    #songs = sortByDate(songs) #uncomment this to sort by date
     loader.print(songs, totalMinutes, totalArtists, totalSongs)
 
 main()
